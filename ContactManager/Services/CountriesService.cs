@@ -8,12 +8,8 @@ namespace Services;
 /// </summary>
 public class CountriesService: ICountriesService
 {
-    private List<Country> _countries;
+    private readonly List<Country> _countries = new();
 
-    public CountriesService()
-    {
-        _countries = new List<Country>();
-    }
     public CountryResponse AddCountry(CountryAddRequest? countryAddRequest)
     {
         // validation: countryAddRequest can't be null

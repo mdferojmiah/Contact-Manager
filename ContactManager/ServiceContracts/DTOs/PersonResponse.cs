@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.JavaScript;
 using Entities;
 
 namespace ServiceContracts.DTOs;
@@ -37,6 +36,21 @@ public class PersonResponse
     {
         // ReSharper disable once BaseObjectGetHashCodeCallInGetHashCode
         return base.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return $"Person Id: {PersonId}\n" +
+               $"Person Name: {PersonName}\n" +
+               $"Email: {Email}\n" +
+               $"Gender: {Gender}\n" +
+               $"Date of Birth: {DateOfBirth}\n" +
+               $"Country: {Country}\n" +
+               $"Country Id: {CountryId}\n" +
+               $"Address: {Address}\n" +
+               $"ReceiveNewsLetters: {ReceiveNewsLetters}\n" +
+               $"Age: {Age}\n" +
+               $"---------------------\n";
     }
 }
 
