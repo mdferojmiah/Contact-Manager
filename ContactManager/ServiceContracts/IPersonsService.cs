@@ -23,4 +23,11 @@ public interface IPersonsService
     /// <param name="personId">PersonId to search</param>
     /// <returns>Person object as PersonResponse</returns>
     PersonResponse? GetPersonByPersonId(Guid? personId);
+    /// <summary>
+    /// returns all the person details based on the searchBy and searchString
+    /// </summary>
+    /// <param name="searchBy">PersonName, Email or something else</param>
+    /// <param name="searchString">The actual string you want to search</param>
+    /// <returns>list of the persons matched with the searched data</returns>
+    List<PersonResponse> GetFilteredPersons(String searchBy, String? searchString);
 }
