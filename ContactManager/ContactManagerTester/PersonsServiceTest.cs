@@ -381,4 +381,87 @@ public class PersonsServiceTest(ITestOutputHelper testOutputHelper)
         }
     }
     #endregion
+
+    #region GetSortedPersons
+    //if sortOrder is selected as descending order, it will return the list as descending order
+    [Fact]
+    public void GetSortedPersons()
+    {
+        //Arrange
+        CountryAddRequest countryAddRequest1 = new CountryAddRequest()
+        {
+            CountryName = "Bangladesh"
+        };
+        CountryAddRequest countryAddRequest2 = new CountryAddRequest()
+        {
+            CountryName = "Iran"
+        };
+        CountryResponse countryResponse1 = _countriesService.AddCountry(countryAddRequest1);
+        CountryResponse countryResponse2 = _countriesService.AddCountry(countryAddRequest2);
+        
+        PersonAddRequest personAddRequest1 = new PersonAddRequest()
+        {
+            PersonName = "Feroj Miah",
+            Email = "feroj@email.com",
+            DateOfBirth = DateTime.Parse("2001-09-11"),
+            Gender = GenderOptions.Male,
+            CountryId = countryResponse1.CountryId,
+            Address = "Address of Feroj",
+            ReceiveNewsLetters = true
+        };
+        PersonAddRequest personAddRequest2 = new PersonAddRequest()
+        {
+            PersonName = "Nadira Sathi",
+            Email = "sath@email.com",
+            DateOfBirth = DateTime.Parse("2005-07-01"),
+            Gender = GenderOptions.Female,
+            CountryId = countryResponse2.CountryId,
+            Address = "Address of sathi",
+            ReceiveNewsLetters = false
+        };
+        PersonAddRequest personAddRequest3 = new PersonAddRequest()
+        {
+            PersonName = "Atiqur Rahman",
+            Email = "atike@email.com",
+            DateOfBirth = DateTime.Parse("2000-12-05"),
+            Gender = GenderOptions.Male,
+            CountryId = countryResponse1.CountryId,
+            Address = "Address of Atike",
+            ReceiveNewsLetters = false
+        };
+        List<PersonAddRequest> personAddRequests = new List<PersonAddRequest>()
+        {
+            personAddRequest1, personAddRequest2, personAddRequest3
+        };
+        
+        List<PersonResponse> personResponsesInput = new List<PersonResponse>();
+        foreach (PersonAddRequest personAddRequest in personAddRequests)
+        {
+            PersonResponse personResponse = _personsService.AddPerson(personAddRequest);
+            personResponsesInput.Add(personResponse);
+        }
+        //printing the inputted data
+        _testOutputHelper.WriteLine("###########Expected:");
+        foreach (PersonResponse personResponse in personResponsesInput)
+        {
+            _testOutputHelper.WriteLine(personResponse.ToString());
+        }
+        
+        //Act
+        List<PersonResponse> allPersons = _personsService.GetAllPersons();
+        List<PersonResponse> personResponsesOutput = _personsService.GetSortedPersons(allPersons, nameof(Person.PersonName), SortOrderOptions.Desc);
+        //printing the output data
+        _testOutputHelper.WriteLine("###########Actual:");
+        foreach (PersonResponse personResponse in personResponsesOutput)
+        {
+            _testOutputHelper.WriteLine(personResponse.ToString());
+        }
+        personResponsesInput = personResponsesInput.OrderByDescending(temp => temp.PersonName).ToList();
+        //Assert
+        for (int i = 0; i < personResponsesInput.Count; i++)
+        {
+            Assert.Equal(personResponsesInput[i], personResponsesOutput[i]);
+        }
+    }
+    #endregion
 }

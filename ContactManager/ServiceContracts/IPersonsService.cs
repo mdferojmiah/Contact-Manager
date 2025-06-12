@@ -1,4 +1,5 @@
 using ServiceContracts.DTOs;
+using ServiceContracts.Enums;
 
 namespace ServiceContracts;
 /// <summary>
@@ -30,4 +31,12 @@ public interface IPersonsService
     /// <param name="searchString">The actual string you want to search</param>
     /// <returns>list of the persons matched with the searched data</returns>
     List<PersonResponse> GetFilteredPersons(String searchBy, String? searchString);
+    /// <summary>
+    /// Returns the all the person into either ascending order or descending order
+    /// </summary>
+    /// <param name="allPersons">allPerson list object</param>
+    /// <param name="sortBy">based on which the list will be sorted</param>
+    /// <param name="sortOrder">ASC/DESC</param>
+    /// <returns>Sorted list in ascending order or descending order</returns>
+    List<PersonResponse> GetSortedPersons(List<PersonResponse> allPersons, string sortBy, SortOrderOptions sortOrder);
 }
