@@ -145,4 +145,45 @@ public class PersonsService : IPersonsService
         };
         return sortedPersons;
     }
+
+    public PersonResponse UpdatePerson(PersonUpdateRequest? personUpdateRequest)
+    {
+        if (personUpdateRequest == null)
+        {
+            throw new ArgumentNullException(nameof(Person));
+        }
+        //Validation
+        ValidationHelper.ModelValidation(personUpdateRequest);
+        //get matching persons object
+        Person? matchingPerson = _persons.FirstOrDefault(temp => temp.PersonId == personUpdateRequest.PersonId);
+        if (matchingPerson == null)
+        {
+            throw new ArgumentException("Given Person Id doesn't exists!");
+        }
+        //updating the data
+        matchingPerson.PersonName = personUpdateRequest.PersonName;
+        matchingPerson.Email = personUpdateRequest.Email;
+        matchingPerson.DateOfBirth = personUpdateRequest.DateOfBirth;
+        matchingPerson.Gender = personUpdateRequest.Gender.ToString();
+        matchingPerson.CountryId = personUpdateRequest.CountryId;
+        matchingPerson.Address = personUpdateRequest.Address;
+        matchingPerson.ReceiveNewsLetters = personUpdateRequest.ReceiveNewsLetters;
+        return matchingPerson.ToPersonResponse();
+    }
+
+    public bool DeletePerson(Guid? personId)
+    {
+        if (personId == null)
+        {
+            throw new ArgumentNullException(nameof(personId));
+        }
+        Person? matchingPerson = _persons.FirstOrDefault(temp => temp.PersonId == personId);
+        if (matchingPerson == null)
+        {
+            return false;
+        }
+
+        _persons.RemoveAll(temp => temp.PersonId == personId);
+        return true;
+    }
 }

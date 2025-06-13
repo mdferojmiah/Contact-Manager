@@ -464,4 +464,179 @@ public class PersonsServiceTest(ITestOutputHelper testOutputHelper)
         }
     }
     #endregion
+
+    #region UpdatePerson
+    //If PersonUpdateRequest is null, then it should return ArgumentNullException
+    [Fact]
+    public void UpdatePerson_NullPersonUpdateRequest()
+    {
+        //Arrange
+        PersonUpdateRequest? personUpdateRequest = null;
+        //Assert
+        Assert.Throws<ArgumentNullException>(() =>
+        {
+            //Act
+            _personsService.UpdatePerson(personUpdateRequest);
+        });
+    }
+    //If invalid personId is submitted, then it should return ArgumentException
+    [Fact]
+    public void UpdatePerson_InvalidPersonId()
+    {
+        //Arrange
+        PersonUpdateRequest? personUpdateRequest = new PersonUpdateRequest()
+        {
+            PersonId = Guid.NewGuid()
+        };
+        //Assert
+        Assert.Throws<ArgumentException>(() =>
+        {
+            //Act
+            _personsService.UpdatePerson(personUpdateRequest);
+        });
+    }
+    //If person name is null, then it should return ArgumentException
+    [Fact]
+    public void UpdatePerson_NullPersonName()
+    {
+        //Arrange
+        CountryAddRequest countryAddRequest = new CountryAddRequest()
+        {
+            CountryName = "Bangladesh"
+        };
+        CountryResponse countryResponse = _countriesService.AddCountry(countryAddRequest);
+        PersonAddRequest personAddRequest = new PersonAddRequest()
+        {
+            PersonName = "Feroj Miah",
+            Email = "01ferojmiah@gmail.com",
+            DateOfBirth = DateTime.Parse("2001-12-05"),
+            Gender = GenderOptions.Male,
+            CountryId = countryResponse.CountryId,
+            Address = "Address of Feroj",
+            ReceiveNewsLetters = true
+        };
+        PersonResponse personResponse = _personsService.AddPerson(personAddRequest);
+        PersonUpdateRequest personUpdateRequest = personResponse.ToPersonUpdateRequest();
+        personUpdateRequest.PersonName = null;
+        //Assert
+        Assert.Throws<ArgumentException>(() =>
+        {
+            //Act
+            _personsService.UpdatePerson(personUpdateRequest);
+        });
+    }
+    //If Email is null, then it should return ArgumentException
+    [Fact]
+    public void UpdatePerson_NullEmail()
+    {
+        //Arrange
+        CountryAddRequest countryAddRequest = new CountryAddRequest()
+        {
+            CountryName = "Bangladesh"
+        };
+        CountryResponse countryResponse = _countriesService.AddCountry(countryAddRequest);
+        PersonAddRequest personAddRequest = new PersonAddRequest()
+        {
+            PersonName = "Feroj Miah",
+            Email = "01ferojmiah@gmail.com",
+            DateOfBirth = DateTime.Parse("2001-12-05"),
+            Gender = GenderOptions.Male,
+            CountryId = countryResponse.CountryId,
+            Address = "Address of Feroj",
+            ReceiveNewsLetters = true
+        };
+        PersonResponse personResponse = _personsService.AddPerson(personAddRequest);
+        PersonUpdateRequest personUpdateRequest = personResponse.ToPersonUpdateRequest();
+        personUpdateRequest.Email = null;
+        //Assert
+        Assert.Throws<ArgumentException>(() =>
+        {
+            //Act
+            _personsService.UpdatePerson(personUpdateRequest);
+        });
+    }
+    //If every data is valid, then it should return valid PersonResponse
+    [Fact]
+    public void UpdatePerson_ValidPersonUpdateRequest()
+    {
+        //Arrange
+        CountryAddRequest countryAddRequest = new CountryAddRequest()
+        {
+            CountryName = "Bangladesh"
+        };
+        CountryResponse countryResponse = _countriesService.AddCountry(countryAddRequest);
+        PersonAddRequest personAddRequest = new PersonAddRequest()
+        {
+            PersonName = "Feroj Miah",
+            Email = "01ferojmiah@gmail.com",
+            DateOfBirth = DateTime.Parse("2001-12-05"),
+            Gender = GenderOptions.Male,
+            CountryId = countryResponse.CountryId,
+            Address = "Address of Feroj",
+            ReceiveNewsLetters = true
+        };
+        PersonResponse personResponse = _personsService.AddPerson(personAddRequest);
+        PersonUpdateRequest personUpdateRequest = personResponse.ToPersonUpdateRequest();
+        //updating details
+        personUpdateRequest.PersonName = "Atiqur Rahman";
+        personUpdateRequest.Email = "mdatiqur0171@gmail.com";
+        personUpdateRequest.Address = "Updated address of Atike";
+        //Act
+        PersonResponse personResponseOutput = _personsService.UpdatePerson(personUpdateRequest);
+        PersonResponse? personResponseInput = _personsService.GetPersonByPersonId(personResponse.PersonId);
+        //Assert
+        Assert.Equal(personResponseInput,personResponseOutput);
+    }
+    #endregion
+
+    #region DeletePerson
+    // if personId is null, it returns argumentNullException
+    [Fact]
+    public void DeletePerson_NullPeronId()
+    {
+        //Arrange
+        Guid? personId = null;
+        //Assert
+        Assert.Throws<ArgumentNullException>(() =>
+        {
+            //Act 
+            _personsService.DeletePerson(personId);
+        });
+    }
+    // if personId is invalid, it returns false
+    [Fact]
+    public void DeletePerson_InvalidPeronId()
+    {
+        //Act 
+        bool isDeleted = _personsService.DeletePerson(Guid.NewGuid());
+        //Assert
+        Assert.False(isDeleted);
+    }
+    // if personId is valid, it returns true
+    [Fact]
+    public void DeletePerson_ValidPeronId()
+    {
+        //Arrange
+        CountryAddRequest countryAddRequest = new CountryAddRequest()
+        {
+            CountryName = "Bangladesh"
+        };
+        CountryResponse countryResponse = _countriesService.AddCountry(countryAddRequest);
+        PersonAddRequest personAddRequest = new PersonAddRequest()
+        {
+            PersonName = "Feroj Miah",
+            Email = "01ferojmiah@gmail.com",
+            DateOfBirth = DateTime.Parse("2001-12-05"),
+            Gender = GenderOptions.Male,
+            CountryId = countryResponse.CountryId,
+            Address = "Address of Feroj",
+            ReceiveNewsLetters = true
+        };
+        PersonResponse personResponse = _personsService.AddPerson(personAddRequest);
+        //Act 
+        bool isDeleted = _personsService.DeletePerson(personResponse.PersonId);
+        //Assert
+        Assert.True(isDeleted);
+    }
+    #endregion
 }

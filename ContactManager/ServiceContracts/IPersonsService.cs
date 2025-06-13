@@ -39,4 +39,16 @@ public interface IPersonsService
     /// <param name="sortOrder">ASC/DESC</param>
     /// <returns>Sorted list in ascending order or descending order</returns>
     List<PersonResponse> GetSortedPersons(List<PersonResponse> allPersons, string sortBy, SortOrderOptions sortOrder);
+    /// <summary>
+    /// updates the person object data in the database 
+    /// </summary>
+    /// <param name="personUpdateRequest">Received data from the UI</param>
+    /// <returns>PersonResponse object of the persons data</returns>
+    PersonResponse UpdatePerson(PersonUpdateRequest? personUpdateRequest);
+    /// <summary>
+    /// Deletes person information based on personID
+    /// </summary>
+    /// <param name="personId">Guid type person id</param>
+    /// <returns>true if deletion is successful; false elsewhere</returns>
+    bool DeletePerson(Guid? personId);
 }
