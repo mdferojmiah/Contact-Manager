@@ -1,0 +1,15 @@
+@if (ViewBag.currentSortBy == ViewBag.ColumnName && ViewBag.currentSortOrder == SortOrderOptions.Asc)
+{
+    <th>
+        <a href="~/persons/index?searchBy=@ViewBag.currentSearchBy&searchString=@ViewBag.currentSearchString&sortBy=@(ViewBag.ColumnName)&sortOrder=@SortOrderOptions.Desc">@(ViewBag.DisplayName)</a>
+        <i class="fa-solid fa-sort-up"></i>
+    </th>
+}
+else
+{
+    <th>
+        <a href="~/persons/index?searchBy=@ViewBag.currentSearchBy&searchString=@ViewBag.currentSearchString&sortBy=@(ViewBag.ColumnName)&sortOrder=@SortOrderOptions.Asc">@(ViewBag.DisplayName)</a>
+        <i class="fa-solid fa-sort-down"></i>
+    </th>
+}
+

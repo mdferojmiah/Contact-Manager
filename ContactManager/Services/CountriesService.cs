@@ -8,7 +8,43 @@ namespace Services;
 /// </summary>
 public class CountriesService: ICountriesService
 {
-    private readonly List<Country> _countries = new();
+    private readonly List<Country> _countries;
+    public CountriesService(bool initialize = true)
+    {
+        _countries = new List<Country>();
+        if (initialize)
+        {
+            // mock data for countries
+            _countries.AddRange(new List<Country>()
+            {
+                new Country()
+                {
+                    CountryId = Guid.Parse("c3145111-6ce9-4bcd-a75c-32f5ae8f9b05"),
+                    CountryName = "UAE"
+                },
+                new Country() 
+                {
+                    CountryId = Guid.Parse("aff89808-67a7-443b-b6b9-3df92996c56b"),
+                    CountryName = "Bangladesh"
+                },
+                new Country() 
+                {
+                    CountryId = Guid.Parse("a68d7aae-cdfa-4d95-a837-e44c7b5e48f2"),
+                    CountryName = "Iran"
+                },
+                new Country()
+                {
+                    CountryId = Guid.Parse("f9d729fb-ed49-4026-84b8-4e950002dfc4"),
+                    CountryName = "Pakistan"
+                },
+                new Country()
+                {
+                    CountryId = Guid.Parse("a9739606-55d8-466e-9db1-c0b513547b7d"),
+                    CountryName = "Palestine"
+                }
+            });
+        }
+    }
 
     public CountryResponse AddCountry(CountryAddRequest? countryAddRequest)
     {

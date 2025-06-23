@@ -10,8 +10,8 @@ namespace ContactManagerTester;
 
 public class PersonsServiceTest(ITestOutputHelper testOutputHelper)
 {
-    private readonly IPersonsService _personsService = new PersonsService();
-    private readonly ICountriesService _countriesService = new CountriesService();
+    private readonly IPersonsService _personsService = new PersonsService(false);
+    private readonly ICountriesService _countriesService = new CountriesService(false);
     private readonly ITestOutputHelper _testOutputHelper = testOutputHelper;
 
     #region AddPerson

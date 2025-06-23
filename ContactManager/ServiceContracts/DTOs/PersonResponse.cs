@@ -16,7 +16,7 @@ public class PersonResponse
     public string? Country { get; set; }
     public string? Address { get; set; }
     public bool ReceiveNewsLetters { get; set; }
-    public double? Age { get; set; }
+    public int? Age { get; set; }
 
     public override bool Equals(object? obj)
     {
@@ -84,7 +84,7 @@ public static class PersonExtensions
             Address = person.Address,
             ReceiveNewsLetters = person.ReceiveNewsLetters,
             Age = (person.DateOfBirth != null) ? 
-                (DateTime.Now - person.DateOfBirth.Value).TotalDays/365.25 
+                (int?)((DateTime.Now - person.DateOfBirth.Value).TotalDays/365.25) 
                 : null
         };
     }
