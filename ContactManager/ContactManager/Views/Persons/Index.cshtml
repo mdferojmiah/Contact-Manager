@@ -2,9 +2,9 @@
 @{
     ViewBag.Title = "Persons";
 }
-<form method="get" action="~/persons/index">
+<form method="get" asp-controller="Persons" asp-action="Index">
     <h1>Persons</h1>
-    <a href="~/persons/create" class="link-hover">Create Person</a>
+    <a asp-controller="Persons" asp-action="Create" class="link-hover">Create Person</a>
     <div class="box flex">
         <div class="flex-1">
             <select class="form-input" name="searchBy">
@@ -26,7 +26,7 @@
         </div>
         <div class="flex-1">
             <button class="button button-blue-back">Search</button>
-            <a href="~/persons/index" class="link-hover">Clear all</a>
+            <a asp-controller="Persons" asp-action="Index" class="link-hover">Clear all</a>
         </div>
     </div>
     <table class="table mt w-100">

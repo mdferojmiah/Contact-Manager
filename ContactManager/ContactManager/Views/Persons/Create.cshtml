@@ -1,7 +1,8 @@
+@model PersonAddRequest
 @{
     ViewBag.Title = "Create Person";
 }
-<a href="~/persons/index" class="link-hover">Back to home</a>
+<a asp-controller="Persons" asp-action="Index" class="link-hover">Back to home</a>
 <h2>Create Person</h2>
 @if (ViewBag.Errors != null)
 {
@@ -15,72 +16,70 @@
     </div>
 }
 <div class="w-50">
-    <form method="post" action="~/persons/create" class="mt">
+    <form method="post" asp-controller="Persons" asp-action="Create" class="mt">
         <div class="flex form-field">
             <div class="w-25">
-                <label class="form-label" for="PersonName">Person Name</label>
+                <label class="form-label" asp-for="PersonName">Person Name</label>
             </div>
             <div class="flex-1">
-                <input class="form-input" id="PersonName" name="PersonName" type="text"/>
+                <input class="form-input" asp-for="PersonName"/>
             </div>
         </div>
         <div class="flex form-field">
             <div class="w-25">
-                <label class="form-label" for="Email">Email</label>
+                <label class="form-label" asp-for="Email">Email</label>
             </div>
             <div class="flex-1">
-                <input class="form-input" id="Email" name="Email" type="email"/>
+                <input class="form-input" asp-for="Email"/>
             </div>
         </div>
         <div class="flex form-field">
             <div class="w-25">
-                <label class="form-label" for="DateOfBirth">Date of Birth</label>
+                <label class="form-label" asp-for="DateOfBirth">Date of Birth</label>
             </div>
             <div class="flex-1">
-                <input class="form-input" id="DateOfBirth" name="DateOfBirth" type="date"/>
+                <input class="form-input" asp-for="DateOfBirth"/>
             </div>
         </div>
         <div class="flex form-field">
             <div class="w-25">
-                <label class="form-label" for="Gender">Gender</label>
+                <label class="form-label" asp-for="Gender">Gender</label>
             </div>
             <div class="flex-1">
-                <input class="ml" id="Male" name="Gender" type="radio" value="Male"/>
-                <label for="Male">Male</label>
-                <input class="ml" id="Female" name="Gender" type="radio" value="Female"/>
-                <label for="Female">Female</label>
-                <input class="ml" id="Others" name="Gender" type="radio" value="Others"/>
-                <label for="Others">Others</label>
+                @{
+                    string[] genders = Enum.GetNames(typeof(GenderOptions));
+                }
+                @foreach (string gender in genders)
+                {
+                    <input class="ml" asp-for="Gender" type="radio" value="@gender"/>
+                    <label for="@gender">@gender</label>
+                }
             </div>
         </div>
         <div class="flex form-field">
             <div class="w-25">
-                <label class="form-label" for="CountryId">Country</label>
+                <label class="form-label" asp-for="CountryId">Country</label>
             </div>
             <div class="flex-1">
-                <select class="form-input" id="CountryId" name="CountryId">
+                <select class="form-input" asp-for="CountryId" asp-items="@ViewBag.Countries">
                     <option value="">Select your country</option>
-                    @foreach (CountryResponse country in ViewBag.Countries)
-                    {
-                        <option value="@country.CountryId">@country.CountryName</option>
-                    }
                 </select>
             </div>
         </div>
         <div class="flex form-field">
             <div class="w-25">
-                <label class="form-label" for="Address">Address</label>
+                <label class="form-label" asp-for="Address">Address</label>
             </div>
             <div class="flex-1">
-                <input class="form-input" id="Address" name="Address" type="text"/>
+                <input class="form-input" asp-for="Address"/>
             </div>
         </div>
         <div class="flex form-field">
             <div class="w-25">
             </div>
             <div class="flex-1">
-                <input id="ReceiveNewsLetters" name="ReceiveNewsLetters" type="checkbox" value="true"/>
-                <label class="form-label" for="ReceiveNewsLetters">Receive News Letters</label>
+                <input asp-for="ReceiveNewsLetters" value="true"/>
+                <label class="form-label" asp-for="ReceiveNewsLetters">Receive News Letters</label>
             </div>
         </div>
         <div class="flex form-field">
