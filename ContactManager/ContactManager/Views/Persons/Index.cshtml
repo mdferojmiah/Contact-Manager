@@ -88,8 +88,8 @@
                 <td>@person.Country</td>
                 <td>@person.Address</td>
                 <td>@person.ReceiveNewsLetters</td>
-                <td><a asp-controller="Persons" asp-action="Edit" asp-route-id="@person.PersonId" class="button button-blue-back">Edit</a></td>
-                <td><button class="button button-red-back">Delete</button></td>
+                <td><a asp-controller="Persons" asp-action="Edit" asp-route-id="@person.PersonId" class="link-hover">Edit</a></td>
+                <td><a asp-controller="Persons" asp-action="Delete" asp-route-id="@person.PersonId" class="link-hover">Delete</a></td>
             </tr>
         }
         </tbody>
