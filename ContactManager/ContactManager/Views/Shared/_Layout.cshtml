@@ -9,7 +9,9 @@
 <body>
 <div class="container">
     <div class="navbar">
-        <div class="navbar-brand">Contact Manager</div>
+        <div class="navbar-brand" style="text-align: center">
+            <img class="mr" style="display: inline-block;" src="~/logo.png" height="25px" width="25px" alt="logo" asp-append-version="true"/> Contact Manager
+        </div>
         <ul>
             <li>
                 <a href="~/persons/index">Persons</a>
@@ -21,5 +23,6 @@
         @RenderBody()
     </div>
 </div>
+@await RenderSectionAsync("validationScripts", required: false)
 </body>
 </html>

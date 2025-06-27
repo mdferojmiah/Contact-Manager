@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ServiceContracts;
 using ServiceContracts.DTOs;
@@ -73,6 +74,49 @@ public class PersonsController : Controller
             return View();
         }
         PersonResponse addedPerson = _personsService.AddPerson(personAddRequest);
+        return RedirectToAction("Index", "Persons");
+    }
+    //GET: persons/edit
+    [Route("[action]/{id:guid}")]
+    [HttpGet]
+    public IActionResult Edit(Guid id)
+    {
+        PersonResponse? person = _personsService.GetPersonByPersonId(id);
+        if (person == null)
+        {
+            return RedirectToAction("Index", "Persons");
+        }
+        PersonUpdateRequest personUpdateRequest = person.ToPersonUpdateRequest();
+        List<CountryResponse> countries = _countriesService.GetAllCountries();
+        ViewBag.Countries = countries.Select(temp => new SelectListItem()
+        {
+            Text = temp.CountryName,
+            Value = temp.CountryId.ToString()
+        });
+        return View(personUpdateRequest);
+    }
+    //POST: persons/edit
+    [HttpPost]
+    [Route("[action]/{id:guid}")]
+    public IActionResult Edit(PersonUpdateRequest personUpdateRequest)
+    {
+        PersonResponse? person = _personsService.GetPersonByPersonId(personUpdateRequest.PersonId);
+        if (person == null)
+        {
+            return RedirectToAction("Index", "Persons");
+        }
+        if (!ModelState.IsValid)
+        {
+            List<CountryResponse> countries = _countriesService.GetAllCountries();
+            ViewBag.Countries = countries.Select(temp => new SelectListItem()
+            {
+                Text = temp.CountryName,
+                Value = temp.CountryId.ToString()
+            });
+            ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return View(personUpdateRequest);
+        }
+        PersonResponse updatedPerson = _personsService.UpdatePerson(personUpdateRequest);
         return RedirectToAction("Index", "Persons");
     }
 }
