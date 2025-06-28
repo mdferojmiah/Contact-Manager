@@ -11,126 +11,13 @@ namespace Services;
 /// </summary>
 public class PersonsService : IPersonsService
 {
-    private readonly List<Person> _persons;
+    private readonly ContactMangerDbContext _dbContext;
     private readonly ICountriesService _countriesService;
 
-    public PersonsService(bool initialize = true)
+    public PersonsService(ContactMangerDbContext dbContext, ICountriesService countriesService)
     {
-        _persons = new List<Person>();
-        _countriesService = new CountriesService();
-        if (initialize)
-        {
-            _persons.Add(new Person()
-            {
-                PersonId = Guid.Parse("6b93c1dc-3469-4951-a498-3f732f3937ee"),
-                PersonName = "Royall Tattersfield",
-                Email = "rtattersfield0@salon.com",
-                DateOfBirth = DateTime.Parse("2000-02-14"),
-                Gender = "Male",
-                Address = "2012 7th Parkway",
-                ReceiveNewsLetters = true,
-                CountryId = Guid.Parse("c3145111-6ce9-4bcd-a75c-32f5ae8f9b05") // UAE
-            });
-            _persons.Add(new Person()
-            {
-                PersonId = Guid.Parse("bdfe6826-4781-4281-8b44-c3f3fc2703b1"),
-                PersonName = "Jabez Oleksinski",
-                Email = "joleksinski1@buzzfeed.com",
-                DateOfBirth = DateTime.Parse("1997-09-08"),
-                Gender = "Male",
-                Address = "99478 Darwin Terrace",
-                ReceiveNewsLetters = false,
-                CountryId = Guid.Parse("aff89808-67a7-443b-b6b9-3df92996c56b") // Bangladesh
-            });
-            _persons.Add(new Person()
-            {
-                PersonId = Guid.Parse("c597de98-6a97-4554-aae5-ec2a6f69627b"),
-                PersonName = "Aurie Sheehan",
-                Email = "asheehan2@icio.us",
-                DateOfBirth = DateTime.Parse("1994-12-08"),
-                Gender = "Female",
-                Address = "8 Arapahoe Parkway",
-                ReceiveNewsLetters = false,
-                CountryId = Guid.Parse("a68d7aae-cdfa-4d95-a837-e44c7b5e48f2") // Iran
-            });
-            _persons.Add(new Person()
-            {
-                PersonId = Guid.Parse("756aea66-396c-4584-bd44-1e8341394025"),
-                PersonName = "Con McClounan",
-                Email = "cmcclounan3@diigo.com",
-                DateOfBirth = DateTime.Parse("2001-08-29"),
-                Gender = "Male",
-                Address = "385 Pleasure Pass",
-                ReceiveNewsLetters = false,
-                CountryId = Guid.Parse("f9d729fb-ed49-4026-84b8-4e950002dfc4") // Pakistan
-            });
-            _persons.Add(new Person()
-            {
-                PersonId = Guid.Parse("b3286416-e6b5-42e1-9155-e89bdfa5eed1"),
-                PersonName = "Celinka Lipgens",
-                Email = "clipgens4@phpbb.com",
-                DateOfBirth = DateTime.Parse("2003-12-22"),
-                Gender = "Female",
-                Address = "43 Cherokee Avenue",
-                ReceiveNewsLetters = false,
-                CountryId = Guid.Parse("a9739606-55d8-466e-9db1-c0b513547b7d") // Palestine
-            });
-            _persons.Add(new Person()
-            {
-                PersonId = Guid.Parse("7f2d236f-8136-4c0c-8f24-b677a6155d3b"),
-                PersonName = "Benyamin Dumberrill",
-                Email = "bdumberrill5@networksolutions.com",
-                DateOfBirth = DateTime.Parse("2000-11-15"),
-                Gender = "Male",
-                Address = "382 Aberg Place",
-                ReceiveNewsLetters = true,
-                CountryId = Guid.Parse("c3145111-6ce9-4bcd-a75c-32f5ae8f9b05") // UAE (repeated)
-            });
-            _persons.Add(new Person()
-            {
-                PersonId = Guid.Parse("57681644-9413-4498-bdf5-6a5baabedfcf"),
-                PersonName = "Beltran Chiles",
-                Email = "bchiles6@godaddy.com",
-                DateOfBirth = DateTime.Parse("1994-02-02"),
-                Gender = "Male",
-                Address = "792 Armistice Park",
-                ReceiveNewsLetters = false,
-                CountryId = Guid.Parse("aff89808-67a7-443b-b6b9-3df92996c56b") // Bangladesh (repeated)
-            });
-            _persons.Add(new Person()
-            {
-                PersonId = Guid.Parse("8122f986-f65d-4f6c-964f-84143138a362"),
-                PersonName = "Benny Orrom",
-                Email = "borrom7@furl.net",
-                DateOfBirth = DateTime.Parse("1998-08-09"),
-                Gender = "Male",
-                Address = "21 Saint Paul Hill",
-                ReceiveNewsLetters = true,
-                CountryId = Guid.Parse("a68d7aae-cdfa-4d95-a837-e44c7b5e48f2") // Iran (repeated)
-            });
-            _persons.Add(new Person()
-            {
-                PersonId = Guid.Parse("ff790c35-2062-41e0-baa0-399d1d3edffc"),
-                PersonName = "Alexia Ilyasov",
-                Email = "ailyasov8@chicagotribune.com",
-                DateOfBirth = DateTime.Parse("1992-08-03"),
-                Gender = "Female",
-                Address = "587 Bay Crossing",
-                ReceiveNewsLetters = true,
-                CountryId = Guid.Parse("f9d729fb-ed49-4026-84b8-4e950002dfc4") // Pakistan (repeated)
-            });
-            _persons.Add(new Person()
-            {
-                PersonId = Guid.Parse("673a905d-410b-481d-9d6b-c751033047d9"),
-                PersonName = "Florry Pickaver",
-                Email = "fpickaver9@aol.com",
-                DateOfBirth = DateTime.Parse("1991-09-26"),
-                Gender = "Female",
-                Address = "6726 Transport Way",
-                ReceiveNewsLetters = true,
-                CountryId = Guid.Parse("a9739606-55d8-466e-9db1-c0b513547b7d") // Palestine (repeated)
-            });
-        }
+        _dbContext = dbContext;
+        _countriesService = countriesService;
     }
 
     private PersonResponse ConvertPersonToPersonResponse(Person person)
@@ -154,19 +41,21 @@ public class PersonsService : IPersonsService
         //creating new guid for person
         person.PersonId = Guid.NewGuid();
         //adding to the list
-        _persons.Add(person);
+        _dbContext.persons.Add(person);
+        _dbContext.SaveChanges();
         return ConvertPersonToPersonResponse(person);
     }
 
     public List<PersonResponse> GetAllPersons()
     {
-        return _persons.Select(person => ConvertPersonToPersonResponse(person)).ToList();
+        return _dbContext.persons.ToList()
+            .Select(person => ConvertPersonToPersonResponse(person)).ToList();
     }
 
     public PersonResponse? GetPersonByPersonId(Guid? personId)
     {
         if (personId == null) return null;
-        Person? person = _persons.FirstOrDefault(temp => temp.PersonId == personId);
+        Person? person = _dbContext.persons.FirstOrDefault(temp => temp.PersonId == personId);
         if (person == null) return null;
         return ConvertPersonToPersonResponse(person);
     }
@@ -295,7 +184,8 @@ public class PersonsService : IPersonsService
         //Validation
         ValidationHelper.ModelValidation(personUpdateRequest);
         //get matching persons object
-        Person? matchingPerson = _persons.FirstOrDefault(temp => temp.PersonId == personUpdateRequest.PersonId);
+        Person? matchingPerson = _dbContext.persons.FirstOrDefault(
+            temp => temp.PersonId == personUpdateRequest.PersonId);
         if (matchingPerson == null)
         {
             throw new ArgumentException("Given Person Id doesn't exists!");
@@ -309,6 +199,7 @@ public class PersonsService : IPersonsService
         matchingPerson.CountryId = personUpdateRequest.CountryId;
         matchingPerson.Address = personUpdateRequest.Address;
         matchingPerson.ReceiveNewsLetters = personUpdateRequest.ReceiveNewsLetters;
+        _dbContext.SaveChanges();
         return ConvertPersonToPersonResponse(matchingPerson);
     }
 
@@ -319,13 +210,17 @@ public class PersonsService : IPersonsService
             throw new ArgumentNullException(nameof(personId));
         }
 
-        Person? matchingPerson = _persons.FirstOrDefault(temp => temp.PersonId == personId);
+        Person? matchingPerson = _dbContext.persons.FirstOrDefault(
+            temp => temp.PersonId == personId);
         if (matchingPerson == null)
         {
             return false;
         }
 
-        _persons.RemoveAll(temp => temp.PersonId == personId);
+        _dbContext.persons.Remove(
+            _dbContext.persons.First(
+                temp => temp.PersonId == personId));
+        _dbContext.SaveChanges();
         return true;
     }
 }
