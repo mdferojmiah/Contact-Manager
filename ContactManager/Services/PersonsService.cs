@@ -41,14 +41,14 @@ public class PersonsService : IPersonsService
         //creating new guid for person
         person.PersonId = Guid.NewGuid();
         //adding to the list
-        _dbContext.persons.Add(person);
+        _dbContext.sp_AddPerson(person);
         _dbContext.SaveChanges();
         return ConvertPersonToPersonResponse(person);
     }
 
     public List<PersonResponse> GetAllPersons()
     {
-        return _dbContext.persons.ToList()
+        return _dbContext.sp_GetAllPersons()
             .Select(person => ConvertPersonToPersonResponse(person)).ToList();
     }
 
@@ -217,9 +217,7 @@ public class PersonsService : IPersonsService
             return false;
         }
 
-        _dbContext.persons.Remove(
-            _dbContext.persons.First(
-                temp => temp.PersonId == personId));
+        _dbContext.sp_DeletePerson(personId.Value);
         _dbContext.SaveChanges();
         return true;
     }

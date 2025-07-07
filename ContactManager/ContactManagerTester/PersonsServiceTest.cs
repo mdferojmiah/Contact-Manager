@@ -1,5 +1,6 @@
 
 using Entities;
+using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
 using ServiceContracts.DTOs;
 using ServiceContracts.Enums;
@@ -8,12 +9,17 @@ using Xunit.Abstractions;
 
 namespace ContactManagerTester;
 
-public class PersonsServiceTest(ITestOutputHelper testOutputHelper)
+public class PersonsServiceTest
 {
-    private readonly IPersonsService _personsService = new PersonsService(false);
-    private readonly ICountriesService _countriesService = new CountriesService(false);
-    private readonly ITestOutputHelper _testOutputHelper = testOutputHelper;
-
+    private readonly ICountriesService _countriesService;
+    private readonly IPersonsService _personsService; 
+    private readonly ITestOutputHelper _testOutputHelper;
+    public PersonsServiceTest(ITestOutputHelper testOutputHelper)
+    {
+        _countriesService = new CountriesService(new ContactMangerDbContext(new DbContextOptionsBuilder<ContactMangerDbContext>().Options));
+        _personsService = new PersonsService(new  ContactMangerDbContext(new DbContextOptionsBuilder<ContactMangerDbContext>().Options), _countriesService);
+        _testOutputHelper = testOutputHelper;
+    }
     #region AddPerson
     //when a null personAddRequest is supplied, it should throw ArgumentNullException
     [Fact]
